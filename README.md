@@ -1,6 +1,22 @@
 # jobCol
 A LinkedIn inspired job board website designed specifically for college students, built using Laravel.
 
+## Features
+
+- **User Authentication** — Register with a unique username and password (min 8 characters, hashed via bcrypt). Login and logout with Laravel session-based auth.
+- **Separate Login & Registration Pages** — A clean sign-in page with a link to register, and vice versa.
+- **Homepage** — Simple welcome page for authenticated users.
+- **Navigation Bar** — Shared header with links to Jobs, Network, and Skills sections, plus logout.
+- **Placeholder Pages** — Jobs, Network, and Skills routes are wired up and currently show an "Under Construction" page.
+- **Blade Templating** — Base layout with reusable header and footer partials; all pages extend a single template.
+- **Tailwind CSS v4** — Styled with Tailwind via Vite.
+
+## Tech Stack
+
+- **Backend:** Laravel 13 (PHP)
+- **Frontend:** Blade templates, Tailwind CSS v4, Vite
+- **Database:** MySQL
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
