@@ -13,9 +13,53 @@ A LinkedIn inspired job board website designed specifically for college students
 
 ## Tech Stack
 
-- **Backend:** Laravel 13 (PHP)
+- **Backend:** Laravel 13 (PHP 8.4)
 - **Frontend:** Blade templates, Tailwind CSS v4, Vite
-- **Database:** MySQL
+- **Database:** MySQL 8.0
+- **Dev Environment:** Laravel Sail (Docker)
+
+## Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+## Getting Started
+
+1. Clone the repo and copy the environment file:
+   ```bash
+   git clone <repo-url> && cd jobCol
+   cp .env.example .env
+   ```
+
+2. Start the containers:
+   ```bash
+   docker compose up -d
+   ```
+
+3. Install dependencies and generate the app key:
+   ```bash
+   docker compose exec laravel.test composer install
+   docker compose exec laravel.test php artisan key:generate
+   ```
+
+4. Run migrations and build frontend assets:
+   ```bash
+   docker compose exec laravel.test php artisan migrate
+   docker compose exec laravel.test npm install
+   docker compose exec laravel.test npm run build
+   ```
+
+5. Visit [http://localhost](http://localhost)
+
+## Useful Commands
+
+| Task | Command |
+|---|---|
+| Start app | `docker compose up -d` |
+| Stop app | `docker compose down` |
+| Run artisan | `docker compose exec laravel.test php artisan <command>` |
+| Run tests | `docker compose exec laravel.test php artisan test` |
+| Vite dev server | `docker compose exec laravel.test npm run dev` |
+| MySQL shell | `docker compose exec mysql mysql -u jobcol -pjobcol jobcol` |
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
