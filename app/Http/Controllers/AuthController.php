@@ -23,11 +23,13 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:8|confirmed',
+            'account_type' => 'required|in:student,employer',
         ]);
 
         $user = User::create([
             'username' => $request->username,
             'password' => $request->password,
+            'account_type' => $request->account_type,
         ]);
 
         Auth::login($user);
