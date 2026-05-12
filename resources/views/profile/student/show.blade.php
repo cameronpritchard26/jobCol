@@ -39,7 +39,49 @@
             @endif
         </div>
 
-        <a href="{{ route('student.profile.edit') }}"
+        <div class="mt-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900">Education</h3>
+                @if ($profile->educationEntries->count() < 3)
+                    <a href="{{ route('education.create') }}"
+                        class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">
+                        + Add Education
+                    </a>
+                @endif
+            </div>
+
+            @if ($profile->educationEntries->isEmpty())
+                <p class="text-sm text-gray-400">No education entries yet.</p>
+            @else
+                <div class="space-y-4">
+                    @foreach ($profile->educationEntries as $entry)
+                        <div class="border border-gray-100 rounded-lg p-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">{{ $entry->degree }}</p>
+                                    <p class="text-sm text-gray-600">{{ $entry->school }}</p>
+                                    <p class="text-xs text-gray-400 mt-1">{{ $entry->start_year }} &ndash; {{ $entry->end_year }}</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('education.edit', $entry) }}"
+                                        class="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition">Edit</a>
+                                    <form method="POST" action="{{ route('education.destroy', $entry) }}" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="text-xs font-medium text-red-500 hover:text-red-700 transition cursor-pointer">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <a href="{{ route('profile.edit') }}"
             class="block text-center w-full bg-indigo-600 text-white rounded-lg py-2 font-semibold hover:bg-indigo-700 transition mt-6">
             Edit Profile
         </a>

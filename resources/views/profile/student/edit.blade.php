@@ -5,7 +5,7 @@
     <div class="w-full max-w-lg bg-white rounded-2xl shadow p-8">
         <h2 class="text-2xl font-bold mb-6 text-center">Edit Your Profile</h2>
 
-        <form method="POST" action="{{ route('student.profile.update') }}" class="space-y-4">
+        <form method="POST" action="{{ route('profile.update') }}" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -69,7 +69,7 @@
             </div>
 
             <div class="flex gap-3">
-                <a href="{{ route('student.profile.show') }}"
+                <a href="{{ route('profile.show') }}"
                     class="flex-1 text-center border border-gray-300 text-gray-700 rounded-lg py-2 font-semibold hover:bg-gray-50 transition">
                     Cancel
                 </a>

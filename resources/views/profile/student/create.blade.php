@@ -5,7 +5,7 @@
     <div class="w-full max-w-lg bg-white rounded-2xl shadow p-8">
         <h2 class="text-2xl font-bold mb-6 text-center">Create Your Profile</h2>
 
-        <form method="POST" action="{{ route('student.profile.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('profile.store') }}" class="space-y-4">
             @csrf
 
             <div class="grid grid-cols-2 gap-4">

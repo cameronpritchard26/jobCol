@@ -13,8 +13,10 @@ class StudentProfileController extends Controller
         $profile = Auth::user()->studentProfile;
 
         if (! $profile) {
-            return redirect()->route('student.profile.create');
+            return redirect()->route('profile.create');
         }
+
+        $profile->load('educationEntries');
 
         return view('profile.student.show', compact('profile'));
     }
@@ -22,7 +24,7 @@ class StudentProfileController extends Controller
     public function create()
     {
         if (Auth::user()->studentProfile) {
-            return redirect()->route('student.profile.show');
+            return redirect()->route('profile.show');
         }
 
         return view('profile.student.create');
@@ -41,7 +43,7 @@ class StudentProfileController extends Controller
 
         Auth::user()->studentProfile()->create($validated);
 
-        return redirect()->route('student.profile.show')
+        return redirect()->route('profile.show')
             ->with('success', 'Profile created successfully.');
     }
 
@@ -50,7 +52,7 @@ class StudentProfileController extends Controller
         $profile = Auth::user()->studentProfile;
 
         if (! $profile) {
-            return redirect()->route('student.profile.create');
+            return redirect()->route('profile.create');
         }
 
         return view('profile.student.edit', compact('profile'));
@@ -69,7 +71,7 @@ class StudentProfileController extends Controller
 
         Auth::user()->studentProfile->update($validated);
 
-        return redirect()->route('student.profile.show')
+        return redirect()->route('profile.show')
             ->with('success', 'Profile updated successfully.');
     }
 }
