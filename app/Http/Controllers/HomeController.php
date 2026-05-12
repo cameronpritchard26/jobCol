@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('home');
+        $profile = Auth::user()->studentProfile;
+
+        return view('home', compact('profile'));
     }
 
     public function underConstruction()
