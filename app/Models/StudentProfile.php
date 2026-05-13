@@ -28,11 +28,17 @@ class StudentProfile extends Model
 
     public function educationEntries(): HasMany
     {
-        return $this->hasMany(EducationEntry::class);
+        return $this->hasMany(EducationEntry::class)
+            ->orderByDesc('end_year')
+            ->orderByDesc('start_year');
     }
 
     public function experienceEntries(): HasMany
     {
-        return $this->hasMany(ExperienceEntry::class);
+        return $this->hasMany(ExperienceEntry::class)
+            ->orderByRaw('end_year IS NOT NULL, end_year DESC')
+            ->orderByRaw('end_month IS NOT NULL, end_month DESC')
+            ->orderByDesc('start_year')
+            ->orderByDesc('start_month');
     }
 }
