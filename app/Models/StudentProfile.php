@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class StudentProfile extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'first_name',
+        'last_name',
+        'school',
+        'major',
+        'grad_year',
+        'about',
+        'profile_picture',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function educationEntries(): HasMany
+    {
+        return $this->hasMany(EducationEntry::class)
+            ->orderByDesc('end_year')
+            ->orderByDesc('start_year');
+    }
+
+    public function experienceEntries(): HasMany
+    {
+        return $this->hasMany(ExperienceEntry::class)
+            ->orderByRaw('end_year IS NOT NULL, end_year DESC')
+            ->orderByRaw('end_month IS NOT NULL, end_month DESC')
+            ->orderByDesc('start_year')
+            ->orderByDesc('start_month');
+    }
+}

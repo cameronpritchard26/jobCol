@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EducationEntryController;
+use App\Http\Controllers\ExperienceEntryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -17,4 +21,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/search-job', [HomeController::class, 'underConstruction']);
     Route::get('/find-someone', [HomeController::class, 'underConstruction']);
     Route::get('/learn-skill', [HomeController::class, 'underConstruction']);
+    Route::get('/messages', [HomeController::class, 'underConstruction']);
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/create', [ProfileController::class, 'create'])->name('profile.create');
+    Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::post('/profile/picture', [ProfilePictureController::class, 'update'])->name('profile.picture.update');
+    Route::get('/profile/picture/status', [ProfilePictureController::class, 'status'])->name('profile.picture.status');
+    Route::delete('/profile/picture', [ProfilePictureController::class, 'destroy'])->name('profile.picture.destroy');
+
+    Route::middleware('account_type:student')->group(function () {
+        Route::get('/profile/education/create', [EducationEntryController::class, 'create'])->name('education.create');
+        Route::post('/profile/education', [EducationEntryController::class, 'store'])->name('education.store');
+        Route::get('/profile/education/{entry}/edit', [EducationEntryController::class, 'edit'])->name('education.edit');
+        Route::put('/profile/education/{entry}', [EducationEntryController::class, 'update'])->name('education.update');
+        Route::delete('/profile/education/{entry}', [EducationEntryController::class, 'destroy'])->name('education.destroy');
+
+        Route::get('/profile/experience/create', [ExperienceEntryController::class, 'create'])->name('experience.create');
+        Route::post('/profile/experience', [ExperienceEntryController::class, 'store'])->name('experience.store');
+        Route::get('/profile/experience/{entry}/edit', [ExperienceEntryController::class, 'edit'])->name('experience.edit');
+        Route::put('/profile/experience/{entry}', [ExperienceEntryController::class, 'update'])->name('experience.update');
+        Route::delete('/profile/experience/{entry}', [ExperienceEntryController::class, 'destroy'])->name('experience.destroy');
+    });
 });

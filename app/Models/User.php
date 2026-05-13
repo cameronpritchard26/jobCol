@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
 #[Fillable(['username', 'email', 'password', 'account_type'])]
@@ -30,5 +31,15 @@ class User extends Authenticatable
             'password' => 'hashed',
             'account_type' => AccountType::class,
         ];
+    }
+
+    public function studentProfile(): HasOne
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
+
+    public function employerProfile(): HasOne
+    {
+        return $this->hasOne(EmployerProfile::class);
     }
 }
