@@ -30,4 +30,9 @@ class StudentProfile extends Model
     {
         return $this->hasMany(EducationEntry::class);
     }
+
+    public function experienceEntries(): HasMany
+    {
+        return $this->hasMany(ExperienceEntry::class);
+    }
 }

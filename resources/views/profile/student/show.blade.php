@@ -81,6 +81,59 @@
             @endif
         </div>
 
+        <div class="mt-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900">Experience</h3>
+                @if ($profile->experienceEntries->count() < 3)
+                    <a href="{{ route('experience.create') }}"
+                        class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition">
+                        + Add Experience
+                    </a>
+                @endif
+            </div>
+
+            @if ($profile->experienceEntries->isEmpty())
+                <p class="text-sm text-gray-400">No experience entries yet.</p>
+            @else
+                <div class="space-y-4">
+                    @foreach ($profile->experienceEntries as $exp)
+                        <div class="border border-gray-100 rounded-lg p-4">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">{{ $exp->title }}</p>
+                                    <p class="text-sm text-gray-600">{{ $exp->company }}</p>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        {{ DateTime::createFromFormat('!m', $exp->start_month)->format('M') }} {{ $exp->start_year }}
+                                        &ndash;
+                                        @if ($exp->end_month && $exp->end_year)
+                                            {{ DateTime::createFromFormat('!m', $exp->end_month)->format('M') }} {{ $exp->end_year }}
+                                        @else
+                                            Present
+                                        @endif
+                                    </p>
+                                    @if ($exp->description)
+                                        <p class="text-sm text-gray-500 mt-2">{{ $exp->description }}</p>
+                                    @endif
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('experience.edit', $exp) }}"
+                                        class="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition">Edit</a>
+                                    <form method="POST" action="{{ route('experience.destroy', $exp) }}" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="text-xs font-medium text-red-500 hover:text-red-700 transition cursor-pointer">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
         <a href="{{ route('profile.edit') }}"
             class="block text-center w-full bg-indigo-600 text-white rounded-lg py-2 font-semibold hover:bg-indigo-700 transition mt-6">
             Edit Profile

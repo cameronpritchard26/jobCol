@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\EducationEntry;
 use App\Models\EmployerProfile;
+use App\Models\ExperienceEntry;
 use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -54,6 +55,20 @@ class DatabaseSeeder extends Seeder
 
             foreach ($entries as $entry) {
                 $summary .= "  - {$entry->degree} at {$entry->school} ({$entry->start_year}–{$entry->end_year})\n";
+            }
+
+            $numExperiences = fake()->numberBetween(1, 3);
+            $experiences = ExperienceEntry::factory($numExperiences)->create([
+                'student_profile_id' => $profile->id,
+            ]);
+
+            $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            $summary .= "- **Experience Entries**:\n";
+
+            foreach ($experiences as $exp) {
+                $start = $months[$exp->start_month - 1] . " {$exp->start_year}";
+                $end = $exp->end_month ? $months[$exp->end_month - 1] . " {$exp->end_year}" : 'Present';
+                $summary .= "  - {$exp->title} at {$exp->company} ({$start} – {$end})\n";
             }
 
             $summary .= "\n";

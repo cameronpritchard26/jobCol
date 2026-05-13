@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EducationEntryController;
+use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,5 +34,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/education/{entry}/edit', [EducationEntryController::class, 'edit'])->name('education.edit');
         Route::put('/profile/education/{entry}', [EducationEntryController::class, 'update'])->name('education.update');
         Route::delete('/profile/education/{entry}', [EducationEntryController::class, 'destroy'])->name('education.destroy');
+
+        Route::get('/profile/experience/create', [ExperienceEntryController::class, 'create'])->name('experience.create');
+        Route::post('/profile/experience', [ExperienceEntryController::class, 'store'])->name('experience.store');
+        Route::get('/profile/experience/{entry}/edit', [ExperienceEntryController::class, 'edit'])->name('experience.edit');
+        Route::put('/profile/experience/{entry}', [ExperienceEntryController::class, 'update'])->name('experience.update');
+        Route::delete('/profile/experience/{entry}', [ExperienceEntryController::class, 'destroy'])->name('experience.destroy');
     });
 });
