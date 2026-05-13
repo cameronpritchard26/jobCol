@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EducationEntryController;
 use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/search-job', [HomeController::class, 'underConstruction']);
-    Route::get('/find-someone', [HomeController::class, 'underConstruction']);
+    Route::get('/network', [NetworkController::class, 'index'])->name('network.index');
+    Route::get('/profile/student/{studentProfile}', [NetworkController::class, 'showStudent'])->name('profile.student.public');
+    Route::get('/profile/employer/{employerProfile}', [NetworkController::class, 'showEmployer'])->name('profile.employer.public');
     Route::get('/learn-skill', [HomeController::class, 'underConstruction']);
     Route::get('/messages', [HomeController::class, 'underConstruction']);
 
