@@ -19,6 +19,7 @@ class StudentProfile extends Model
         'major',
         'grad_year',
         'about',
+        'profile_picture',
     ];
 
     public function user(): BelongsTo

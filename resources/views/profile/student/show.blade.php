@@ -11,6 +11,19 @@
         @endif
 
         <div class="text-center mb-6">
+            <div class="flex justify-center mb-4">
+                @if ($profile->profile_picture)
+                    <img src="{{ asset('storage/profile-pictures/' . $profile->profile_picture) }}"
+                        alt="Profile picture"
+                        class="w-32 h-32 rounded-full object-cover border-2 border-gray-200">
+                @else
+                    <div class="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+                        <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                    </div>
+                @endif
+            </div>
             <h2 class="text-2xl font-bold">{{ $profile->first_name }} {{ $profile->last_name }}</h2>
             <p class="text-gray-500 text-sm mt-1">{{ Auth::user()->username }}</p>
         </div>
@@ -140,4 +153,26 @@
         </a>
     </div>
 </div>
+@if (session('success') && str_contains(session('success'), 'being processed'))
+<script>
+    (function () {
+        const statusUrl = "{{ route('profile.picture.status') }}";
+        const maxAttempts = 15;
+        let attempts = 0;
+
+        const poll = setInterval(async () => {
+            attempts++;
+            try {
+                const res = await fetch(statusUrl);
+                const data = await res.json();
+                if (data.profile_picture) {
+                    clearInterval(poll);
+                    window.location.reload();
+                }
+            } catch (e) {}
+            if (attempts >= maxAttempts) clearInterval(poll);
+        }, 2000);
+    })();
+</script>
+@endif
 @endsection

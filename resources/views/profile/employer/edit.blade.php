@@ -5,6 +5,8 @@
     <div class="w-full max-w-lg bg-white rounded-2xl shadow p-8">
         <h2 class="text-2xl font-bold mb-6 text-center">Edit Your Profile</h2>
 
+        @include('partials.profile-picture', ['profile' => $profile])
+
         <form method="POST" action="{{ route('profile.update') }}" class="space-y-4">
             @csrf
             @method('PUT')

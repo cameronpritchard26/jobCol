@@ -16,6 +16,7 @@ class EmployerProfile extends Model
         'location',
         'website',
         'description',
+        'profile_picture',
     ];
 
     public function user(): BelongsTo

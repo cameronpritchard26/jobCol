@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EducationEntryController;
 use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -27,6 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::post('/profile/picture', [ProfilePictureController::class, 'update'])->name('profile.picture.update');
+    Route::get('/profile/picture/status', [ProfilePictureController::class, 'status'])->name('profile.picture.status');
+    Route::delete('/profile/picture', [ProfilePictureController::class, 'destroy'])->name('profile.picture.destroy');
 
     Route::middleware('account_type:student')->group(function () {
         Route::get('/profile/education/create', [EducationEntryController::class, 'create'])->name('education.create');
