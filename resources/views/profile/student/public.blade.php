@@ -20,6 +20,62 @@
             </div>
             <h2 class="text-2xl font-bold">{{ $profile->first_name }} {{ $profile->last_name }}</h2>
             <p class="text-gray-500 text-sm mt-1">{{ $profile->user->username }}</p>
+
+            @if (auth()->user()->account_type === \App\Enums\AccountType::Student && auth()->user()->studentProfile && auth()->user()->studentProfile->id !== $profile->id)
+                <div class="mt-4">
+                    @if (session('success'))
+                        <p class="text-green-600 text-sm mb-2">{{ session('success') }}</p>
+                    @endif
+                    @if (session('error'))
+                        <p class="text-red-600 text-sm mb-2">{{ session('error') }}</p>
+                    @endif
+
+                    @if ($connectionStatus === null)
+                        <form method="POST" action="{{ route('connections.store', $profile) }}">
+                            @csrf
+                            <button type="submit"
+                                class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition cursor-pointer">
+                                Connect
+                            </button>
+                        </form>
+                    @elseif ($connectionStatus === 'pending_sent')
+                        <span class="inline-block bg-gray-200 text-gray-600 px-5 py-2 rounded-lg text-sm font-medium">
+                            Request Pending
+                        </span>
+                    @elseif ($connectionStatus === 'pending_received')
+                        <div class="flex justify-center gap-2">
+                            <form method="POST" action="{{ route('connections.accept', $connection) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition cursor-pointer">
+                                    Accept
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ route('connections.reject', $connection) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit"
+                                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition cursor-pointer">
+                                    Reject
+                                </button>
+                            </form>
+                        </div>
+                    @elseif ($connectionStatus === 'connected')
+                        <div class="flex flex-col items-center gap-2">
+                            <span class="inline-block text-green-700 text-sm font-medium">Connected</span>
+                            <form method="POST" action="{{ route('connections.destroy', $connection) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="text-red-500 text-xs hover:text-red-700 transition cursor-pointer">
+                                    Remove Connection
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
 
         <div class="space-y-4">

@@ -6,6 +6,7 @@ use App\Http\Controllers\EducationEntryController;
 use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NetworkController;
+use App\Http\Controllers\ConnectionController;
 use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,5 +49,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/experience/{entry}/edit', [ExperienceEntryController::class, 'edit'])->name('experience.edit');
         Route::put('/profile/experience/{entry}', [ExperienceEntryController::class, 'update'])->name('experience.update');
         Route::delete('/profile/experience/{entry}', [ExperienceEntryController::class, 'destroy'])->name('experience.destroy');
+
+        Route::post('/connections/{studentProfile}', [ConnectionController::class, 'store'])->name('connections.store');
+        Route::put('/connections/{connection}/accept', [ConnectionController::class, 'accept'])->name('connections.accept');
+        Route::put('/connections/{connection}/reject', [ConnectionController::class, 'reject'])->name('connections.reject');
+        Route::delete('/connections/{connection}', [ConnectionController::class, 'destroy'])->name('connections.destroy');
     });
 });
