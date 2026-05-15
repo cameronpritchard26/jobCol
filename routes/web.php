@@ -7,6 +7,7 @@ use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfilePictureController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/picture', [ProfilePictureController::class, 'update'])->name('profile.picture.update');
     Route::get('/profile/picture/status', [ProfilePictureController::class, 'status'])->name('profile.picture.status');
     Route::delete('/profile/picture', [ProfilePictureController::class, 'destroy'])->name('profile.picture.destroy');
+
+    Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+
+    Route::middleware('account_type:employer')->group(function () {
+        Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
+        Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+        Route::get('/jobs/{jobPosting}/edit', [JobController::class, 'edit'])->name('jobs.edit');
+        Route::put('/jobs/{jobPosting}', [JobController::class, 'update'])->name('jobs.update');
+        Route::delete('/jobs/{jobPosting}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    });
+
+    Route::get('/jobs/{jobPosting}', [JobController::class, 'show'])->name('jobs.show');
 
     Route::middleware('account_type:student')->group(function () {
         Route::get('/profile/education/create', [EducationEntryController::class, 'create'])->name('education.create');
