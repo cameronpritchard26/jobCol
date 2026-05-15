@@ -7,6 +7,7 @@ use App\Enums\SalaryType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobPosting extends Model
 {
@@ -34,5 +35,15 @@ class JobPosting extends Model
     public function employer(): BelongsTo
     {
         return $this->belongsTo(EmployerProfile::class, 'employer_id');
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class, 'job_id');
+    }
+
+    public function savedByStudents(): HasMany
+    {
+        return $this->hasMany(SavedJob::class, 'job_id');
     }
 }

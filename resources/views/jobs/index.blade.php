@@ -10,7 +10,7 @@
     @endif
 
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Job Listings</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ $myEmployerProfileId ? 'My Job Postings' : 'Job Listings' }}</h1>
         @if ($myEmployerProfileId)
             <a href="{{ route('jobs.create') }}"
                 class="bg-indigo-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-indigo-700 transition">

@@ -54,6 +54,16 @@ class StudentProfile extends Model
         return $this->hasMany(Connection::class, 'receiver_id');
     }
 
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class, 'student_id');
+    }
+
+    public function savedJobs(): HasMany
+    {
+        return $this->hasMany(SavedJob::class, 'student_id');
+    }
+
     public function connections(): Collection
     {
         $sent = Connection::where('sender_id', $this->id)

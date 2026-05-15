@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\AccountType;
 use App\Enums\JobType;
 use App\Enums\SalaryType;
+use App\Models\JobApplication;
 use App\Models\JobPosting;
+use App\Models\SavedJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -14,10 +16,18 @@ class JobController extends Controller
 {
     public function index()
     {
-        $jobPostings = JobPosting::with('employer')->latest()->paginate(12);
-        $myEmployerProfileId = Auth::user()->account_type === AccountType::Employer
-            ? Auth::user()->employerProfile?->id
-            : null;
+        $user = Auth::user();
+
+        if ($user->account_type === AccountType::Employer) {
+            $myEmployerProfileId = $user->employerProfile?->id;
+            $jobPostings = JobPosting::with('employer')
+                ->where('employer_id', $myEmployerProfileId)
+                ->latest()
+                ->paginate(12);
+        } else {
+            $myEmployerProfileId = null;
+            $jobPostings = JobPosting::with('employer')->latest()->paginate(12);
+        }
 
         return view('jobs.index', compact('jobPostings', 'myEmployerProfileId'));
     }
@@ -47,10 +57,20 @@ class JobController extends Controller
     public function show(JobPosting $jobPosting)
     {
         $jobPosting->load('employer');
-        $isOwner = Auth::user()->account_type === AccountType::Employer
-            && Auth::user()->employerProfile?->id === $jobPosting->employer_id;
+        $user    = Auth::user();
+        $isOwner = $user->account_type === AccountType::Employer
+            && $user->employerProfile?->id === $jobPosting->employer_id;
 
-        return view('jobs.show', compact('jobPosting', 'isOwner'));
+        $hasApplied = false;
+        $isSaved    = false;
+
+        if ($user->account_type === AccountType::Student && $user->studentProfile) {
+            $studentId  = $user->studentProfile->id;
+            $hasApplied = JobApplication::where('student_id', $studentId)->where('job_id', $jobPosting->id)->exists();
+            $isSaved    = SavedJob::where('student_id', $studentId)->where('job_id', $jobPosting->id)->exists();
+        }
+
+        return view('jobs.show', compact('jobPosting', 'isOwner', 'hasApplied', 'isSaved'));
     }
 
     public function edit(JobPosting $jobPosting)

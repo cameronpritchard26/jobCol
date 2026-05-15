@@ -7,8 +7,10 @@ use App\Http\Controllers\ExperienceEntryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ProfilePictureController;
+use App\Http\Controllers\SavedJobController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -46,6 +48,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/jobs/{jobPosting}/edit', [JobController::class, 'edit'])->name('jobs.edit');
         Route::put('/jobs/{jobPosting}', [JobController::class, 'update'])->name('jobs.update');
         Route::delete('/jobs/{jobPosting}', [JobController::class, 'destroy'])->name('jobs.destroy');
+        Route::get('/jobs/{jobPosting}/applications', [JobApplicationController::class, 'indexForJob'])->name('jobs.applications');
+        Route::patch('/applications/{application}/status', [JobApplicationController::class, 'updateStatus'])->name('applications.update-status');
     });
 
     Route::get('/jobs/{jobPosting}', [JobController::class, 'show'])->name('jobs.show');
@@ -62,6 +66,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/experience/{entry}/edit', [ExperienceEntryController::class, 'edit'])->name('experience.edit');
         Route::put('/profile/experience/{entry}', [ExperienceEntryController::class, 'update'])->name('experience.update');
         Route::delete('/profile/experience/{entry}', [ExperienceEntryController::class, 'destroy'])->name('experience.destroy');
+
+        Route::post('/jobs/{jobPosting}/apply', [JobApplicationController::class, 'store'])->name('jobs.apply');
+        Route::delete('/jobs/{jobPosting}/apply', [JobApplicationController::class, 'destroy'])->name('jobs.apply.destroy');
+        Route::post('/jobs/{jobPosting}/save', [SavedJobController::class, 'store'])->name('jobs.save');
+        Route::delete('/jobs/{jobPosting}/unsave', [SavedJobController::class, 'destroy'])->name('jobs.unsave');
+        Route::get('/my-jobs', [SavedJobController::class, 'index'])->name('student.my-jobs');
 
         Route::post('/connections/{studentProfile}', [ConnectionController::class, 'store'])->name('connections.store');
         Route::put('/connections/{connection}/accept', [ConnectionController::class, 'accept'])->name('connections.accept');

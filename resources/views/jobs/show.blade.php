@@ -67,6 +67,10 @@
                     class="flex-1 text-center bg-indigo-600 text-white rounded-lg py-2 font-semibold hover:bg-indigo-700 transition text-sm">
                     Edit Posting
                 </a>
+                <a href="{{ route('jobs.applications', $jobPosting) }}"
+                    class="flex-1 text-center bg-white text-indigo-600 border border-indigo-600 rounded-lg py-2 font-semibold hover:bg-indigo-50 transition text-sm">
+                    View Applications
+                </a>
                 <form method="POST" action="{{ route('jobs.destroy', $jobPosting) }}"
                     onsubmit="return confirm('Delete this job posting?')" class="flex-1">
                     @csrf
@@ -76,6 +80,48 @@
                         Delete Posting
                     </button>
                 </form>
+            </div>
+
+        @elseif (Auth::user()->account_type->value === 'student')
+            <div class="flex gap-3 pt-4 border-t border-gray-100">
+                @if ($hasApplied)
+                    <form method="POST" action="{{ route('jobs.apply.destroy', $jobPosting) }}" class="flex-1"
+                        onsubmit="return confirm('Withdraw your application?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="w-full bg-gray-100 text-gray-500 rounded-lg py-2 font-semibold hover:bg-gray-200 transition text-sm cursor-pointer">
+                            Withdraw Application
+                        </button>
+                    </form>
+                @else
+                    <form method="POST" action="{{ route('jobs.apply', $jobPosting) }}" class="flex-1">
+                        @csrf
+                        <button type="submit"
+                            class="w-full bg-indigo-600 text-white rounded-lg py-2 font-semibold hover:bg-indigo-700 transition text-sm cursor-pointer">
+                            Apply Now
+                        </button>
+                    </form>
+                @endif
+
+                @if ($isSaved)
+                    <form method="POST" action="{{ route('jobs.unsave', $jobPosting) }}" class="flex-1">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="w-full bg-gray-50 text-gray-600 border border-gray-200 rounded-lg py-2 font-semibold hover:bg-gray-100 transition text-sm cursor-pointer">
+                            Unsave
+                        </button>
+                    </form>
+                @else
+                    <form method="POST" action="{{ route('jobs.save', $jobPosting) }}" class="flex-1">
+                        @csrf
+                        <button type="submit"
+                            class="w-full bg-white text-indigo-600 border border-indigo-600 rounded-lg py-2 font-semibold hover:bg-indigo-50 transition text-sm cursor-pointer">
+                            Save Job
+                        </button>
+                    </form>
+                @endif
             </div>
         @endif
 

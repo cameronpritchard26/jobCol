@@ -60,8 +60,12 @@ The custom `EnsureAccountType` middleware restricts routes to a specific account
 User (1) ──── (1) StudentProfile ──── (many) EducationEntry
                                   ──── (many) ExperienceEntry
                                   ──── (many) Connection (sender_id / receiver_id, status: pending|accepted)
+                                  ──── (many) JobApplication (student_id FK, status: submitted|accepted|rejected)
+                                  ──── (many) SavedJob (student_id FK)
 
 User (1) ──── (1) EmployerProfile ──── (many) JobPosting (employer_id FK)
+                                            ──── (many) JobApplication (job_id FK)
+                                            ──── (many) SavedJob (job_id FK)
 ```
 
 `StudentProfile::connections()` returns a merged collection of accepted connections in both directions (sender or receiver).
@@ -77,6 +81,7 @@ User (1) ──── (1) EmployerProfile ──── (many) JobPosting (employ
 | `AccountType` | `student`, `employer`, `admin` |
 | `JobType` | `full_time`, `part_time`, `internship`, `contract` |
 | `SalaryType` | `hourly`, `annually` |
+| `ApplicationStatus` | `submitted`, `accepted`, `rejected` |
 
 All enums live in `app/Enums/` and have a `label()` method for display.
 
@@ -86,8 +91,8 @@ All enums live in `app/Enums/` and have a `label()` method for display.
 |---|---|---|
 | Guest routes | `guest` | Login, register |
 | Authenticated routes | `auth` | Home, profile CRUD, picture upload, network search, job browsing |
-| Employer routes | `auth` + `account_type:employer` | Job posting CRUD |
-| Student routes | `auth` + `account_type:student` | Education/experience CRUD, connection actions |
+| Employer routes | `auth` + `account_type:employer` | Job posting CRUD, view/manage applications |
+| Student routes | `auth` + `account_type:student` | Education/experience CRUD, connection actions, apply/save jobs, My Jobs page |
 
 Profile routing is dispatched through a single `ProfileController` that delegates to student or employer logic based on the authenticated user's account type.
 
@@ -102,7 +107,9 @@ The `/jobs/create` route is registered before `/jobs/{jobPosting}` to prevent `c
 - `NetworkController` — user search, public student/employer profile views
 - `ConnectionController` — send, accept, reject, remove connections
 - `EducationController` / `ExperienceController` — student profile entries
-- `JobController` — job listing browse (`index`, `show`) and employer CRUD (`create`, `store`, `edit`, `update`, `destroy`); ownership enforced via `authorizeOwnership()` helper
+- `JobController` — job listing browse (`index`, `show`) and employer CRUD (`create`, `store`, `edit`, `update`, `destroy`); ownership enforced via `authorizeOwnership()` helper; `show` passes `$hasApplied` and `$isSaved` for student UI state
+- `JobApplicationController` — student apply (`store`); employer view applications (`indexForJob`); employer update status (`updateStatus`)
+- `SavedJobController` — student save (`store`), unsave (`destroy`), and My Jobs page (`index` — passes both saved jobs and applications)
 
 ### Frontend
 
