@@ -10,10 +10,10 @@
 
             <nav class="flex items-center gap-6">
                 <a href="{{ route('jobs.index') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Jobs</a>
-                <a href="/network" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Network</a>
+                <a href="{{ route('network.index') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Network</a>
                 <a href="/learn-skill" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Skills</a>
                 <a href="/messages" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Messages</a>
-                <a href="/profile" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Profile</a>
+                <a href="{{ route('profile.show') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Profile</a>
 
                 <form method="POST" action="/logout">
                     @csrf
